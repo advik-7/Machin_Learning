@@ -1,0 +1,32 @@
+import pandas as pd 
+from sklearn.datasets import load_digits
+data = load_digits()
+#print(data.data.shape)
+df=pd.DataFrame(data.data,columns=data.feature_names)
+#print(df.describe)
+x=df
+y=data.target
+#scale the data before using pca
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+x_scaled = scaler.fit_transform(x)
+#print(x_scaled)
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x_scaled,y,test_size=0.2)
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
+model.fit(x_train,y_train)
+print(model.score(x_test,y_test))
+# we got 0.969 accuracy from model and data without pca
+from sklearn.decomposition import PCA
+#parameter in pca is the number of components to keep and create new dimensions 
+pca=PCA(0.95)  #we asking him to keep 95% of the variance
+x_pca=pca.fit_transform(x_scaled)
+#print(pca.n_components)
+#print(pca.explained_variance_ratio_)
+model1=LogisticRegression()
+x_train_pca,x_test_pca,y_train,y_test=train_test_split(x_pca,y,test_size=0.2)
+model1.fit(x_train_pca,y_train)
+print(model1.score(x_test_pca,y_test))
+
+#accuracy didnt change much despite using pca to eliminate soo many features
