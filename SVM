@@ -1,0 +1,15 @@
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+
+data={'age':[30,25,35,20,40,55,32,28],'monthly_charge':[50,60,80,40,100,120,70,55],'churn':[0,1,0,1,0,1,0,1]}
+df=pd.DataFrame(data)
+print(df)
+X=df[['age','monthly_charge']]
+Y=df['churn']
+X_train,X_test,Y_train,Y_test= train_test_split(X,Y,test_size=0.2,random_state=42)
+model=SVC(kernel='linear', C=1.0)#default regularization 
+model.fit(X_train,Y_train)
+Y_pred=model.predict(X_test)
+print(Y_pred)
+accuracy=accuracy_score(Y_test,Y_pred)
+print(accuracy)
