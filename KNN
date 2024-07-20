@@ -1,0 +1,26 @@
+import pandas as pd
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+iris=load_iris()
+#print(iris.feature_names)
+#print(iris.target_names)
+df=pd.DataFrame(iris.data,columns=iris.feature_names)
+df['target']=iris.target
+print(df)
+df0=df[:50]
+df1=df[50:100]
+df2=df[100:]
+'''plt.xlabel('sepal length')
+plt.ylabel('sepal width')
+plt.scatter(df0['sepal length (cm)'],df0['sepal width (cm)'],color='green',marker='+')
+plt.scatter(df1['sepal length (cm)'],df1['sepal width (cm)'],color='red',marker='.')'''
+from sklearn.model_selection import train_test_split
+y=df.target
+x=df.drop(['target'],axis='columns')
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=42)
+print(len(x_train))
+print(len(x_test))
+from sklearn.neighbors import KNeighborsClassifier 
+model = KNeighborsClassifier(n_neighbors=3)#k is the number of neighbours u check for, 3 is ideal  , u can use grid search cv , or k fold cross validation 
+model.fit(x_train,y_train)
+print(model.score(x_test,y_test))
